@@ -1,25 +1,25 @@
 # 🚀 Project 92 – Blue-Green Deployment Zero Downtime | Full Stack DevOps | AWS ALB Ready
 
-[Java 21](https://img.shields.io/badge/Java-21-E76F00?logo=openjdk&logoColor=white)
-[Spring Boot 3.2.5](https://img.shields.io/badge/Spring%20Boot-3.2.5-6DB33F?logo=springboot&logoColor=white)
-[Docker Ready](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
-[Blue-Green](https://img.shields.io/badge/Blue--Green-Deployment-00BFFF?logo=blueprint&logoColor=white)
-[Zero Downtime](https://img.shields.io/badge/Zero%20Downtime-Enabled-00FF7F?logo=awselasticloadbalancing&logoColor=white)
-[AWS EC2](https://img.shields.io/badge/AWS-EC2-FF9900?logo=amazonec2&logoColor=white)
-[AWS ALB](https://img.shields.io/badge/AWS-ALB-FF9900?logo=awselasticloadbalancing&logoColor=white)
-[AWS RDS](https://img.shields.io/badge/AWS-RDS-527FFF?logo=amazonrds&logoColor=white)
-[AWS S3](https://img.shields.io/badge/AWS-S3-569A31?logo=amazons3&logoColor=white)
-[MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
-[H2 Database](https://img.shields.io/badge/H2-In--Memory-1024D6?logo=h2&logoColor=white)
-[Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-E95420?logo=ubuntu&logoColor=white)
-[Maven](https://img.shields.io/badge/Maven-3.9+-C71A36?logo=apachemaven&logoColor=white)
-[Tomcat](https://img.shields.io/badge/Apache%20Tomcat-10.1.20-D4AF00?logo=apachetomcat&logoColor=white)
-[Port](https://img.shields.io/badge/Port-9999-00BFFF)
-[Status](https://img.shields.io/badge/Status-Blue--Green%20Live-00BFFF)
+![Java 21](https://img.shields.io/badge/Java-21-E76F00?logo=openjdk&logoColor=white)
+![Spring Boot 3.2.5](https://img.shields.io/badge/Spring%20Boot-3.2.5-6DB33F?logo=springboot&logoColor=white)
+![Docker Ready](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
+![Blue-Green](https://img.shields.io/badge/Blue--Green-Deployment-00BFFF?logo=blueprint&logoColor=white)
+![Zero Downtime](https://img.shields.io/badge/Zero%20Downtime-Enabled-00FF7F?logo=awselasticloadbalancing&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/AWS-EC2-FF9900?logo=amazonec2&logoColor=white)
+![AWS ALB](https://img.shields.io/badge/AWS-ALB-FF9900?logo=awselasticloadbalancing&logoColor=white)
+![AWS RDS](https://img.shields.io/badge/AWS-RDS-527FFF?logo=amazonrds&logoColor=white)
+![AWS S3](https://img.shields.io/badge/AWS-S3-569A31?logo=amazons3&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
+![H2 Database](https://img.shields.io/badge/H2-In--Memory-1024D6?logo=h2&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-E95420?logo=ubuntu&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-3.9+-C71A36?logo=apachemaven&logoColor=white)
+![Tomcat](https://img.shields.io/badge/Apache%20Tomcat-10.1.20-D4AF00?logo=apachetomcat&logoColor=white)
+![Port](https://img.shields.io/badge/Port-9999-00BFFF)
+![Status](https://img.shields.io/badge/Status-Blue--Green%20Live-00BFFF)
 
 **Live URL:** https://nine2-blue-green-deploy.onrender.com/
 
-[[Live](https://img.shields.io/badge/Live-Render-brightgreen?style=for-the-badge&logo=render)](https://nine2-blue-green-deploy.onrender.com)
+[![Live](https://img.shields.io/badge/Live-Render-brightgreen?style=for-the-badge&logo=render)](https://nine2-blue-green-deploy.onrender.com)
 
 Project 92 - Part of Java 100 Projects Challenge - DevOps + Cloud Tier - **Tier 9 COMPLETE 83-92**
 ---
