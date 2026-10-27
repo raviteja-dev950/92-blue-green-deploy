@@ -438,55 +438,7 @@ curl https://nine2-blue-green-deploy.onrender.com/deploy/rollback
 
 ---
 
-# 📸 Screenshots
 
-### Demo 1 – Browser - GET / - Home Live Blue-Green Zero Downtime activeEnv blue tier 9
-![Demo1 Home](screenshots/demo1.png)
-
-*GET http://localhost:9999/ - Browser JSON - 200 OK - Returns {"project":"92-blue-green-deploy","status":"Live - Blue-Green Zero Downtime","activeEnv":"blue","traffic":{"blue":0,"green":0},"totalDeployments":0,"owner":"Raviteja","tier":"9 - DevOps + Cloud - Blue-Green","endpoints":[...10 endpoints]} - Proof of Home Live - Portfolio ready*
-
-### Demo 2 – Browser - GET /deploy/init - Blue ACTIVE 100% Green INACTIVE 0% total 2 switchCount 0
-![Demo2 Init](screenshots/demo2.png)
-
-*GET http://localhost:9999/deploy/init - Browser JSON - 200 OK - Returns {"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}} - Proof of Blue-Green Init - Creates 2 deployments - Blue v1.0 ACTIVE 100% + Green v2.0 INACTIVE 0% - Same as terraform apply blue + green*
-
-### Demo 3 – Browser - GET /deploy/status - activeEnv blue traffic blue 100 green 0 zeroDowntime true
-![Demo3 Status](screenshots/demo3.png)
-
-*GET http://localhost:9999/deploy/status - Browser JSON - 200 OK - Returns {"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}} - Proof of Status - activeEnv blue - traffic 100-0 - zeroDowntime true - blueVersion v1.0 greenVersion v2.0*
-
-### Demo 4 – Browser - GET /deploy/switch?target=green - Traffic switched to GREEN Zero Downtime Success switchCount 1 downtime 0s
-![Demo4 Switch](screenshots/demo4.png)
-
-*GET http://localhost:9999/deploy/switch?target=green - Browser JSON - 200 OK - Returns {"activeEnv":"green","previousEnv":"blue","switchCount":1,"message":"Traffic switched to GREEN - Zero Downtime Success!","traffic":{"green":100,"blue":0},"downtime":"0s - Blue-Green ensures no downtime"} - Proof of Zero Downtime Switch - activeEnv green - previousEnv blue - switchCount 1 - downtime 0s - ALB listener rule weight switch simulation*
-
-### Demo 5 – Browser - GET /deploy/traffic - activeEnv green blue 0 green 100 total 100 strategy 100-0
-![Demo5 Traffic](screenshots/demo5.png)
-
-*GET http://localhost:9999/deploy/traffic - Browser JSON - 200 OK - Returns {"strategy":"Blue-Green 100-0","green":100,"total":100,"activeEnv":"green","blue":0} - Proof of Traffic - After switch green 100% blue 0% - total 100 - strategy Blue-Green 100-0 - ALB weight*
-
-### Demo 6 – Browser - GET /deploy/versions - 2 deployments HEALTHY blue INACTIVE green ACTIVE
-![Demo6 Versions](screenshots/demo6.png)
-
-*GET http://localhost:9999/deploy/versions - Browser JSON - 200 OK - Returns [{"id":1,"environment":"blue","version":"v1.0","status":"INACTIVE","trafficWeight":0,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"},{"id":2,"environment":"green","version":"v2.0","status":"ACTIVE","trafficWeight":100,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"}] - Proof of Versions - 2 deployments HEALTHY - Blue INACTIVE v1.0 traffic 0 + Green ACTIVE v2.0 traffic 100 - Instance count 1 each*
-
-### Demo 7 – Browser - GET /deploy/status after switch - activeEnv green blue 0 green 100
-![Demo7 Status Green](screenshots/demo7.png)
-
-*GET http://localhost:9999/deploy/status after switch - Browser JSON - 200 OK - Returns {"activeEnv":"green","traffic":{"blue":0,"green":100},"blueVersion":"v1.0","greenVersion":"v2.0","switchCount":1,"zeroDowntime":true} - Proof of Status after switch - activeEnv green - traffic blue 0 green 100 - switchCount 1 - Zero downtime maintained*
-
-### Demo 8 – Browser - GET /deploy/rollback - Rollback to blue Zero Downtime
-![Demo8 Rollback](screenshots/demo8.png)
-
-*GET http://localhost:9999/deploy/rollback - Browser JSON - 200 OK - Returns {"activeEnv":"blue","previousEnv":"green","switchCount":2,"message":"Traffic switched to BLUE - Zero Downtime Success!","traffic":{"green":0,"blue":100},"downtime":"0s"} - Proof of Rollback - If green has issue, rollback to blue - activeEnv blue again - switchCount 2 - Zero downtime rollback - Production safety*
-
-### Demo 9 – Render Live - Deploy Succeeded - LIVE - TIER 9 COMPLETE
-![Demo9 Render](screenshots/demo9.png)
-
-*Render Dashboard - 92-blue-green-deploy - STATUS: Deploy succeeded | Live - DURATION: 2m15s - DEPLOYED: Oct 27, 2026 at 7:15:05 PM GMT+5:30 - TRIGGER: Manual Deploy - SOURCE: commit xxxxxxx - Logs: Tomcat started on port 9999 - Started BlueGreenApplication in 11.275 seconds (process running for 12.007) - Your service is live - Available at your primary URL https://nine2-blue-green-deploy.onrender.com - Proof of Live Deployment on Internet - Docker Multi-Stage + Blue-Green Simulation working on Render - TIER 9 COMPLETE 83-92 92/100*
-
->>>>>>> a50c999fe661d5479f3cabe9993669135bd375c2
----
 
 # 🧪 API Testing Examples
 
