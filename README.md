@@ -136,12 +136,15 @@ This is Project 92 of Tier 9 - FINAL - After Terraform Script (91), now real Blu
 │   ├── demo1.png (GET / - Home Live Blue-Green Zero Downtime)
 │   ├── demo2.png (GET /deploy/init - blue ACTIVE 100% green INACTIVE 0% total 2)
 │   ├── demo3.png (GET /deploy/status - activeEnv blue traffic 100-0 zeroDowntime true)
-│   ├── demo4.png (GET /deploy/switch?target=green - Traffic switched to GREEN Success switchCount 1 downtime 0s)
-│   ├── demo5.png (GET /deploy/traffic - activeEnv green blue 0 green 100 total 100 strategy 100-0)
-│   ├── demo6.png (GET /deploy/versions - 2 deployments HEALTHY v1.0 blue INACTIVE + v2.0 green ACTIVE)
-│   ├── demo7.png (GET /deploy/status after switch - activeEnv green)
-│   ├── demo8.png (GET /deploy/rollback - Rollback to blue)
-│   └── demo9.png (Render Live - Deploy succeeded LIVE)
+│   ├── demo4.png (GET /deploy/blue?version=v1.1 - Deploy blue v1.1 ACTIVE 100%)
+│   ├── demo5.png (GET /deploy/green?version=v2.1 - Deploy green v2.1 INACTIVE 0%)
+│   ├── demo6.png (GET /deploy/switch?target=green - Traffic switched to GREEN Success switchCount 1)
+│   ├── demo7.png (GET /deploy/status after switch - activeEnv green blue 0 green 100 switchCount 1)
+│   ├── demo8.png (GET /deploy/traffic - activeEnv green blue 0 green 100 total 100)
+│   ├── demo9.png (GET /deploy/versions - 2 HEALTHY blue INACTIVE + green ACTIVE)
+│   ├── demo10.png (GET /deploy/rollback - Rollback to BLUE Success switchCount 2)
+│   ├── demo11.png (GET /deploy/status after rollback - activeEnv blue back)
+│   └── demo12.png (Render Live - Deploy succeeded LIVE Tier 9 Complete)
 │
 ├── Dockerfile
 ├── .gitignore
@@ -150,6 +153,70 @@ This is Project 92 of Tier 9 - FINAL - After Terraform Script (91), now real Blu
 ├── pom.xml
 └── README.md
 ```
+
+---
+
+# 📸 Screenshots - 12 Demos - Blue-Green Zero Downtime Verified
+
+### Demo 1 – Browser - GET / - Home Live Blue-Green Zero Downtime activeEnv blue tier 9
+[Demo1 Home](screenshots/demo1.png)
+
+*GET http://localhost:9999/ - Browser JSON - 200 OK - Returns {"project":"92-blue-green-deploy","status":"Live - Blue-Green Zero Downtime","activeEnv":"blue","traffic":{"blue":0,"green":0},"totalDeployments":0,"owner":"Raviteja","tier":"9 - DevOps + Cloud - Blue-Green","endpoints":[...10 endpoints]} - Proof of Home Live - Portfolio ready - Fixed blue\n bug*
+
+### Demo 2 – Browser - GET /deploy/init - Blue ACTIVE 100% Green INACTIVE 0% total 2 switchCount 0
+[Demo2 Init](screenshots/demo2.png)
+
+*GET http://localhost:9999/deploy/init - Browser JSON - 200 OK - Returns {"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}} - Proof of Blue-Green Init - Creates 2 deployments - Blue v1.0 ACTIVE 100% + Green v2.0 INACTIVE 0% - Same as terraform apply blue + green*
+
+### Demo 3 – Browser - GET /deploy/status - activeEnv blue traffic blue 100 green 0 zeroDowntime true
+[Demo3 Status](screenshots/demo3.png)
+
+*GET http://localhost:9999/deploy/status - Browser JSON - 200 OK - Returns {"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}} - Proof of Status - activeEnv blue - traffic 100-0 - zeroDowntime true - blueVersion v1.0 greenVersion v2.0*
+
+### Demo 4 – Browser - GET /deploy/blue?version=v1.1 - Deploy Blue v1.1 ACTIVE 100%
+[Demo4 Deploy Blue](screenshots/demo4.png)
+
+*GET http://localhost:9999/deploy/blue?version=v1.1 - Browser JSON - 200 OK - Returns {"id":1,"environment":"blue","version":"v1.1","status":"ACTIVE","trafficWeight":100,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"} - Proof of Deploy Blue - Updates blue to v1.1 - Keeps ACTIVE 100% if blue active - Simulates blue EC2 deploy*
+
+### Demo 5 – Browser - GET /deploy/green?version=v2.1 - Deploy Green v2.1 INACTIVE 0%
+[Demo5 Deploy Green](screenshots/demo5.png)
+
+*GET http://localhost:9999/deploy/green?version=v2.1 - Browser JSON - 200 OK - Returns {"id":2,"environment":"green","version":"v2.1","status":"INACTIVE","trafficWeight":0,"instanceCount":1,"health":"HEALTHY"} - Proof of Deploy Green - Updates green to v2.1 - Keeps INACTIVE 0% if blue active - Test green internally before switch*
+
+### Demo 6 – Browser - GET /deploy/switch?target=green - Traffic switched to GREEN Zero Downtime Success switchCount 1 downtime 0s
+[Demo6 Switch Green](screenshots/demo6.png)
+
+*GET http://localhost:9999/deploy/switch?target=green - Browser JSON - 200 OK - Returns {"activeEnv":"green","previousEnv":"blue","switchCount":1,"message":"Traffic switched to GREEN - Zero Downtime Success!","traffic":{"green":100,"blue":0},"downtime":"0s - Blue-Green ensures no downtime"} - Proof of Zero Downtime Switch - activeEnv green - previousEnv blue - switchCount 1 - downtime 0s - ALB listener rule weight switch simulation*
+
+### Demo 7 – Browser - GET /deploy/status after switch - activeEnv green blue 0 green 100 switchCount 1
+[Demo7 Status Green](screenshots/demo7.png)
+
+*GET http://localhost:9999/deploy/status after switch - Browser JSON - 200 OK - Returns {"strategy":"Blue-Green Deployment - 0 Downtime","greenVersion":"v2.0","blueVersion":"v1.0","zeroDowntime":true,"blueStatus":"INACTIVE","totalDeployments":2,"switchCount":1,"greenStatus":"ACTIVE","traffic":{"blue":0,"green":100},"activeEnv":"green"} - Proof of Status after switch - activeEnv green - traffic blue 0 green 100 - switchCount 1 - Zero downtime maintained - Blue INACTIVE Green ACTIVE*
+
+### Demo 8 – Browser - GET /deploy/traffic - activeEnv green blue 0 green 100 total 100 strategy 100-0
+[Demo8 Traffic](screenshots/demo8.png)
+
+*GET http://localhost:9999/deploy/traffic - Browser JSON - 200 OK - Returns {"strategy":"Blue-Green 100-0","green":100,"total":100,"activeEnv":"green","blue":0} - Proof of Traffic - After switch green 100% blue 0% - total 100 - strategy Blue-Green 100-0 - ALB weight simulation*
+
+### Demo 9 – Browser - GET /deploy/versions - 2 deployments HEALTHY blue INACTIVE green ACTIVE
+[Demo9 Versions](screenshots/demo9.png)
+
+*GET http://localhost:9999/deploy/versions - Browser JSON - 200 OK - Returns [{"id":1,"environment":"blue","version":"v1.0","status":"INACTIVE","trafficWeight":0,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"},{"id":2,"environment":"green","version":"v2.0","status":"ACTIVE","trafficWeight":100,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"}] - Proof of Versions - 2 deployments HEALTHY - Blue INACTIVE v1.0 traffic 0 + Green ACTIVE v2.0 traffic 100 - Instance count 1 each - Health HEALTHY*
+
+### Demo 10 – Browser - GET /deploy/rollback - Rollback to BLUE Zero Downtime Success switchCount 2
+[Demo10 Rollback](screenshots/demo10.png)
+
+*GET http://localhost:9999/deploy/rollback - Browser JSON - 200 OK - Returns {"traffic":{"blue":100,"green":0},"message":"Traffic switched to BLUE - Zero Downtime Success!","switchCount":2,"previousEnv":"green","activeEnv":"blue","downtime":"0s - Blue-Green ensures no downtime"} - Proof of Rollback - If green has issue, rollback to blue - activeEnv blue again - switchCount 2 - Zero downtime rollback - Production safety - previousEnv green*
+
+### Demo 11 – Browser - GET /deploy/status after rollback - activeEnv blue blue 100 green 0 switchCount 2
+[Demo11 Status Blue After Rollback](screenshots/demo11.png)
+
+*GET http://localhost:9999/deploy/status after rollback - Browser JSON - 200 OK - Returns {"activeEnv":"blue","traffic":{"blue":100,"green":0},"blueVersion":"v1.0","greenVersion":"v2.0","switchCount":2,"zeroDowntime":true,"strategy":"Blue-Green Deployment - 0 Downtime"} - Proof of Status after rollback - activeEnv blue back - traffic blue 100 green 0 - switchCount 2 - Zero downtime rollback verified*
+
+### Demo 12 – Render Live - Deploy Succeeded - LIVE - TIER 9 COMPLETE 92/100
+[Demo12 Render](screenshots/demo12.png)
+
+*Render Dashboard - 92-blue-green-deploy - STATUS: Deploy succeeded | Live - DURATION: 2m15s - DEPLOYED: Oct 27, 2026 at 7:15:05 PM GMT+5:30 - TRIGGER: Manual Deploy - SOURCE: commit xxxxxxx - Logs: Tomcat started on port 9999 - Started BlueGreenApplication in 11.275 seconds (process running for 12.007) - Your service is live - Available at your primary URL https://nine2-blue-green-deploy.onrender.com - Proof of Live Deployment on Internet - Docker Multi-Stage + Blue-Green Simulation working on Render - TIER 9 COMPLETE 83-92 92/100 - Final Project of Tier 9*
 
 ---
 
@@ -184,91 +251,7 @@ app.name=92-blue-green-deploy
 app.region=${AWS_REGION:ap-south-1}
 ```
 
-- Verify `BlueGreenService.java` - NEW FOR 92 - Core Zero Downtime Logic
-
-```java
-@Service
-public class BlueGreenService {
-  private String activeEnv = "blue";
-  private int switchCount = 0;
-
-  public Map<String, Object> init() {
-    repo.deleteAll();
-    Deployment blue = new Deployment("blue", "v1.0", "ACTIVE", 100);
-    Deployment green = new Deployment("green", "v2.0", "INACTIVE", 0);
-    repo.save(blue); repo.save(green);
-    activeEnv = "blue";
-    return status();
-  }
-  public Map<String, Object> status() {
-    Deployment blue = repo.findByEnvironment("blue").orElse(new Deployment("blue","v1.0","ACTIVE",100));
-    Deployment green = repo.findByEnvironment("green").orElse(new Deployment("green","v2.0","INACTIVE",0));
-    return Map.of("activeEnv",activeEnv,"traffic",Map.of("blue",blue.getTrafficWeight(),"green",green.getTrafficWeight()),"blueVersion",blue.getVersion(),"greenVersion",green.getVersion(),"switchCount",switchCount,"zeroDowntime",true,"strategy","Blue-Green Deployment - 0 Downtime");
-  }
-  public Map<String, Object> switchEnv(String target) {
-    Deployment blue = repo.findByEnvironment("blue").orElse(null);
-    Deployment green = repo.findByEnvironment("green").orElse(null);
-    if(target.equals("blue")) { blue.setStatus("ACTIVE"); blue.setTrafficWeight(100); green.setStatus("INACTIVE"); green.setTrafficWeight(0); }
-    else { green.setStatus("ACTIVE"); green.setTrafficWeight(100); blue.setStatus("INACTIVE"); blue.setTrafficWeight(0); }
-    repo.save(blue); repo.save(green); activeEnv=target; switchCount++;
-    return Map.of("message","Traffic switched to "+target.toUpperCase()+" - Zero Downtime Success!","activeEnv",activeEnv,"traffic",Map.of("blue",blue.getTrafficWeight(),"green",green.getTrafficWeight()),"switchCount",switchCount,"downtime","0s - Blue-Green ensures no downtime");
-  }
-}
-```
-
-- Verify `DeploymentController.java` - NEW FOR 92 - 8 endpoints + rollback
-
-```java
-@RestController
-@RequestMapping("/deploy")
-public class DeploymentController {
-  @GetMapping("/init")
-  public Map<String, Object> init() { return service.init(); }
-
-  @GetMapping("/status")
-  public Map<String, Object> status() { return service.status(); }
-
-  @RequestMapping(value="/blue", method={GET,POST})
-  public Deployment deployBlue(@RequestParam(defaultValue="v1.1") String version) { return service.deployBlue(version); }
-
-  @RequestMapping(value="/green", method={GET,POST})
-  public Deployment deployGreen(@RequestParam(defaultValue="v2.1") String version) { return service.deployGreen(version); }
-
-  @RequestMapping(value="/switch", method={GET,POST})
-  public Map<String, Object> switchEnv(@RequestParam(defaultValue="green") String target) { return service.switchEnv(target); }
-
-  @GetMapping("/traffic")
-  public Map<String, Object> traffic() { return service.traffic(); }
-
-  @GetMapping("/versions")
-  public List<Deployment> versions() { return service.getAll(); }
-
-  @GetMapping("/rollback")
-  public Map<String, Object> rollback() { String prev = service.status().get("activeEnv").toString().equals("blue") ? "green" : "blue"; return service.switchEnv(prev); }
-}
-```
-
-- Verify `Dockerfile`
-
-```dockerfile
-FROM maven:3.9-eclipse-temurin-21 AS builder
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -Dmaven.test.skip=true
-
-FROM eclipse-temurin:21-jdk
-WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar
-EXPOSE 9999
-ENTRYPOINT ["java","-jar","app.jar"]
-```
-
----
-
 ## 3⃣ Run in Eclipse IDE (No Docker Needed)
-
-Eclipse Steps:
 
 ```text
 File -> New -> Spring Starter Project
@@ -288,7 +271,6 @@ Right Click Project -> Run As -> Spring Boot App
 ```
 
 Expected Console:
-
 ```text
  :: Spring Boot ::                (v3.2.5)
  Tomcat initialized with port 9999 (http)
@@ -301,354 +283,57 @@ Expected Console:
  Started BlueGreenApplication in 11.275 seconds (process running for 12.007)
 ```
 
----
+## 4⃣ Test with Browser - 12 Endpoints
 
-## 4⃣ Test with Browser - 8 Endpoints - Real Blue-Green Flow
+- GET / -> Home Live
+- GET /deploy/init -> Blue ACTIVE 100%
+- GET /deploy/status -> Blue 100
+- GET /deploy/blue?version=v1.1 -> Deploy Blue
+- GET /deploy/green?version=v2.1 -> Deploy Green
+- GET /deploy/switch?target=green -> GREEN Success!
+- GET /deploy/status -> Green ACTIVE
+- GET /deploy/traffic -> Green 100
+- GET /deploy/versions -> 2 HEALTHY
+- GET /deploy/rollback -> BLUE Success switchCount 2
+- GET /deploy/status -> Blue back
+- Render Live
 
-Open Browser:
-
-**Test 1: Home - Live Blue-Green**
-
-```text
-GET http://localhost:9999/
-Expected 200 OK:
-{"project":"92-blue-green-deploy","status":"Live - Blue-Green Zero Downtime","activeEnv":"blue","traffic":{"blue":0,"green":0},"totalDeployments":0,"owner":"Raviteja","tier":"9 - DevOps + Cloud - Blue-Green"}
-```
-
-**Test 2: Init - Blue ACTIVE 100% Green INACTIVE 0%**
-
-```text
-GET http://localhost:9999/deploy/init
-Expected 200 OK:
-{"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}}
-```
-
-**Test 3: Status - activeEnv blue traffic 100-0**
-
-```text
-GET http://localhost:9999/deploy/status
-Expected 200 OK:
-{"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}}
-```
-
-**Test 4: Switch to Green - Zero Downtime Success**
-
-```text
-GET http://localhost:9999/deploy/switch?target=green
-Expected 200 OK:
-{"activeEnv":"green","previousEnv":"blue","switchCount":1,"message":"Traffic switched to GREEN - Zero Downtime Success!","traffic":{"green":100,"blue":0},"downtime":"0s - Blue-Green ensures no downtime"}
-```
-
-**Test 5: Traffic - green 100 blue 0 after switch**
-
-```text
-GET http://localhost:9999/deploy/traffic
-Expected 200 OK:
-{"strategy":"Blue-Green 100-0","green":100,"total":100,"activeEnv":"green","blue":0}
-```
-
-**Test 6: Versions - 2 deployments HEALTHY**
-
-```text
-GET http://localhost:9999/deploy/versions
-Expected 200 OK:
-[{"id":1,"environment":"blue","version":"v1.0","status":"INACTIVE","trafficWeight":0,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"},{"id":2,"environment":"green","version":"v2.0","status":"ACTIVE","trafficWeight":100,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"}]
-```
-
-**Test 7: Deploy Blue v1.1**
-
-```text
-GET http://localhost:9999/deploy/blue?version=v1.1
-Expected 200 OK: {"id":1,"environment":"blue","version":"v1.1","status":"INACTIVE","trafficWeight":0,"health":"HEALTHY"}
-```
-
-**Test 8: Rollback - Switch back to Blue**
-
-```text
-GET http://localhost:9999/deploy/rollback
-Expected 200 OK: {"activeEnv":"blue","previousEnv":"green","switchCount":2,"message":"Traffic switched to BLUE - Zero Downtime Success!","traffic":{"green":0,"blue":100}}
-```
-
----
-
-## 5⃣ Docker Build & Run (Local)
+## 5⃣ Docker Build & Run
 
 ```bash
 docker build -t 92-blue-green-deploy .
 docker run -d -p 9999:9999 --name bg-app 92-blue-green-deploy
 docker ps
 docker logs bg-app
-curl http://localhost:9999/
 curl http://localhost:9999/deploy/init
-curl http://localhost:9999/deploy/status
 curl http://localhost:9999/deploy/switch?target=green
-curl http://localhost:9999/deploy/traffic
-curl http://localhost:9999/deploy/versions
 ```
-
----
 
 ## 6⃣ Deploy to Render (Docker) - Live URL - TIER 9 COMPLETE
 
-Go to `Render.com -> New Web Service -> Connect GitHub Repo: 92-blue-green-deploy`
-
 ```text
 Runtime: Docker
-Dockerfile Path: ./Dockerfile
 Port: 9999
-Branch: main
-
-Env Vars (Local H2 + Blue-Green Simulation - No AWS card needed - SAME AS 90/91):
+Env Vars:
   PORT = 9999
   ACTIVE_ENV = blue
   AWS_REGION = ap-south-1
-  No RDS_URL! No DATABASE_URL! Hardcoded H2 in properties!
 ```
-
-Click `Deploy`
-
-Expected Logs on Render:
-
-```text
-#12 exporting to image
-#13 DONE
-Deploy succeeded
-HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:raviteja92 user=SA
-Tomcat started on port 9999
-Started BlueGreenApplication in 11.275 seconds
-Your service is live
-Available at: https://nine2-blue-green-deploy.onrender.com
-```
-
-Test Live:
-
-```bash
-curl https://nine2-blue-green-deploy.onrender.com/
-curl https://nine2-blue-green-deploy.onrender.com/deploy/init
-curl https://nine2-blue-green-deploy.onrender.com/deploy/status
-curl https://nine2-blue-green-deploy.onrender.com/deploy/switch?target=green
-curl https://nine2-blue-green-deploy.onrender.com/deploy/traffic
-curl https://nine2-blue-green-deploy.onrender.com/deploy/versions
-curl https://nine2-blue-green-deploy.onrender.com/deploy/rollback
-```
-
----
-
-# 🔄 Flow Diagram - How Blue-Green Zero Downtime Works
-
-```text
-    User Laptop (Eclipse + Browser)
-        |
-        +-- E:\Java-100-Projects\92-blue-green-deploy
-        |       +-- src -> BlueGreenApplication.java (Home / + /health)
-        |       +-- controller -> DeploymentController.java (init + status + blue + green + switch + traffic + versions + rollback)
-        |       +-- service -> BlueGreenService.java (activeEnv + switchCount + init + deploy + switch + traffic logic)
-        |       +-- entity -> Deployment.java (@Entity deployments) + repository
-        |       +-- resources -> application.properties (active-env + region hardcoded blue)
-        |       +-- Dockerfile (multi-stage builder + runtime)
-        |       +-- screenshots (demo1-9)
-        |
-        v
-    git push origin main
-        |
-        +---> GitHub Repository: raviteja-dev950/92-blue-green-deploy
-        |           |
-        |           v
-        |       Render Auto Deploy (Docker)
-        |           +-- Dockerfile build mvn clean package -Dmaven.test.skip=true
-        |           +-- ENTRYPOINT java -jar app.jar (PORT=9999, ACTIVE_ENV=blue)
-        |           +-- Live: https://nine2-blue-green-deploy.onrender.com
-        |
-        v
-    Local Eclipse Run (No AWS card needed - Blue-Green Simulation + H2)
-        |
-        +-- Spring Boot App -> Tomcat 9999
-        |     +-- DataSource Auto-Detect from URL jdbc:h2:mem:raviteja92
-        |     |     +-- HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:raviteja92 user=SA
-        |     +-- JPA / Hibernate
-        |     |     +-- create table deployments
-        |     +-- BlueGreenService
-        |     |     +-- init() -> deleteAll() + blue v1.0 ACTIVE 100% + green v2.0 INACTIVE 0% + save() + activeEnv=blue + switchCount=0
-        |     |     +-- status() -> findByEnvironment blue + green + Map activeEnv + traffic + versions + switchCount + zeroDowntime true
-        |     |     +-- deployBlue(version) -> find blue + set version + set deployedAt now + if activeEnv blue set ACTIVE 100% else INACTIVE 0% + save()
-        |     |     +-- deployGreen(version) -> find green + set version + same traffic logic
-        |     |     +-- switchEnv(target green) -> find blue + green + blue ACTIVE 100% -> INACTIVE 0% + green INACTIVE 0% -> ACTIVE 100% + activeEnv=green + switchCount++ + return message Zero Downtime Success!
-        |     |     +-- traffic() -> return activeEnv + blue weight + green weight + total 100 + strategy Blue-Green 100-0
-        |     |     +-- getAll() -> findAll() deployments
-        |     |     +-- rollback() -> switch to previous env -> same as switchEnv but prev
-        |     +-- Controllers
-        |           +-- GET / -> {project:92-blue-green-deploy, status:Live - Blue-Green Zero Downtime, activeEnv:blue, traffic:100-0, totalDeployments:2}
-        |           +-- GET /deploy/init -> blue ACTIVE 100% green INACTIVE 0% total 2 switchCount 0
-        |           +-- GET /deploy/status -> activeEnv blue blueVersion v1.0 greenVersion v2.0 zeroDowntime true traffic blue 100 green 0
-        |           +-- GET /deploy/blue?version=v1.1 -> Updates blue to v1.1 ACTIVE if blue active
-        |           +-- GET /deploy/green?version=v2.0 -> Updates green to v2.0 INACTIVE if blue active
-        |           +-- GET /deploy/switch?target=green -> Traffic switched to GREEN - Zero Downtime Success! switchCount 1 downtime 0s
-        |           +-- GET /deploy/traffic -> activeEnv green blue 0 green 100 strategy 100-0
-        |           +-- GET /deploy/versions -> 2 deployments HEALTHY
-        |           +-- GET /deploy/rollback -> Switch back to blue - Zero Downtime Success!
-        |
-        v
-    Future AWS Production (With AWS Card - Real Blue-Green + ALB)
-        |
-        +-- AWS Architecture - Blue-Green Zero Downtime
-        |     +-- VPC vpc-0a1b2c3d with 2 AZ ap-south-1a + ap-south-1b + 2 Public Subnets + 2 Private Subnets + NAT Gateway
-        |     +-- ALB raviteja-92-alb - Listener Port 80 + Target Group Blue TG (blue-ec2-1) + Target Group Green TG (green-ec2-1) + Listener Rule weight
-        |     +-- Blue Environment - EC2 t2.micro ap-south-1a - AMI Ubuntu 22.04 + Docker 92-blue-green-deploy:v1.0 + Security Group Port 9999 + ACTIVE + Weight 100%
-        |     +-- Green Environment - EC2 t2.micro ap-south-1b - AMI Ubuntu 22.04 + Docker 92-blue-green-deploy:v2.0 + Security Group Port 9999 + INACTIVE + Weight 0%
-        |     +-- Deployment Flow - 1. Deploy Blue v1.0 -> ALB 100% Blue 0% Green -> Test Blue -> 2. Deploy Green v2.0 -> ALB still 100% Blue -> Test Green internally -> 3. Switch -> ALB Listener Rule Weight 0% Blue 100% Green -> Zero Downtime Switch -> 4. Monitor Green -> If issue -> Rollback -> ALB 100% Blue
-        |     +-- RDS raviteja-92-rds MySQL 8.0 db.t3.micro - Stores deployments table - Both blue + green connect to same RDS
-        |     +-- S3 raviteja-blue-green-92 bucket - Stores artifacts v1.0.jar + v2.0.jar
-        |     +-- CloudWatch Alarms - UnhealthyHostCount >0 in Blue TG + Green TG + ALB 5xx >0 + CPU >80% - SNS email alert
-        |     +-- Route 53 - Domain blue-green.raviteja.dev -> ALB DNS
-        |     +-- Real Commands: terraform apply -var="environment=blue" -> creates blue infra -> terraform apply -var="environment=green" -> creates green infra -> aws elbv2 modify-listener --listener-arn arn:aws:elbv2:... --default-actions Type=forward,ForwardConfig={TargetGroups=[{TargetGroupArn=blue-tg-arn,Weight=0},{TargetGroupArn=green-tg-arn,Weight=100}]} -> Switch
-        |
-        v
-    Browser / Portfolio / AWS Console
-        |
-        +-- localhost:9999/ -> Live Blue-Green Zero Downtime
-        +-- localhost:9999/deploy/init -> blue ACTIVE 100% green INACTIVE 0%
-        +-- localhost:9999/deploy/status -> activeEnv blue
-        +-- localhost:9999/deploy/switch?target=green -> Traffic switched to GREEN Success!
-        +-- localhost:9999/deploy/traffic -> green 100 blue 0
-        +-- localhost:9999/deploy/versions -> 2 deployments HEALTHY
-        +-- localhost:9999/deploy/rollback -> Rollback to blue
-        +-- Live: https://nine2-blue-green-deploy.onrender.com/ -> Same JSON on Internet
-              |
-              +-- Real ALB Target Group Dashboard (Future): Blue TG - 1 healthy host - Green TG - 1 healthy host - Listener Rule - Weight Blue 100 Green 0 -> After Switch - Weight Blue 0 Green 100 - Zero Downtime
-              v
-    Portfolio: Live Blue-Green URL + GitHub + 9 Demo Screenshots + ALB Flow -> Resume Ready - DevOps + Cloud Tier 9 COMPLETE 83-92 - 92/100
-```
-
----
-
-# 📸 Screenshots
-
-### Demo 1 – Browser - GET / - Home Live Blue-Green Zero Downtime activeEnv blue tier 9
-[Demo1 Home](screenshots/demo1.png)
-
-*GET http://localhost:9999/ - Browser JSON - 200 OK - Returns {"project":"92-blue-green-deploy","status":"Live - Blue-Green Zero Downtime","activeEnv":"blue","traffic":{"blue":0,"green":0},"totalDeployments":0,"owner":"Raviteja","tier":"9 - DevOps + Cloud - Blue-Green","endpoints":[...10 endpoints]} - Proof of Home Live - Portfolio ready*
-
-### Demo 2 – Browser - GET /deploy/init - Blue ACTIVE 100% Green INACTIVE 0% total 2 switchCount 0
-[Demo2 Init](screenshots/demo2.png)
-
-*GET http://localhost:9999/deploy/init - Browser JSON - 200 OK - Returns {"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}} - Proof of Blue-Green Init - Creates 2 deployments - Blue v1.0 ACTIVE 100% + Green v2.0 INACTIVE 0% - Same as terraform apply blue + green*
-
-### Demo 3 – Browser - GET /deploy/status - activeEnv blue traffic blue 100 green 0 zeroDowntime true
-[Demo3 Status](screenshots/demo3.png)
-
-*GET http://localhost:9999/deploy/status - Browser JSON - 200 OK - Returns {"greenStatus":"INACTIVE","switchCount":0,"totalDeployments":2,"blueStatus":"ACTIVE","zeroDowntime":true,"blueVersion":"v1.0","greenVersion":"v2.0","strategy":"Blue-Green Deployment - 0 Downtime","activeEnv":"blue","traffic":{"green":0,"blue":100}} - Proof of Status - activeEnv blue - traffic 100-0 - zeroDowntime true - blueVersion v1.0 greenVersion v2.0*
-
-### Demo 4 – Browser - GET /deploy/switch?target=green - Traffic switched to GREEN Zero Downtime Success switchCount 1 downtime 0s
-[Demo4 Switch](screenshots/demo4.png)
-
-*GET http://localhost:9999/deploy/switch?target=green - Browser JSON - 200 OK - Returns {"activeEnv":"green","previousEnv":"blue","switchCount":1,"message":"Traffic switched to GREEN - Zero Downtime Success!","traffic":{"green":100,"blue":0},"downtime":"0s - Blue-Green ensures no downtime"} - Proof of Zero Downtime Switch - activeEnv green - previousEnv blue - switchCount 1 - downtime 0s - ALB listener rule weight switch simulation*
-
-### Demo 5 – Browser - GET /deploy/traffic - activeEnv green blue 0 green 100 total 100 strategy 100-0
-[Demo5 Traffic](screenshots/demo5.png)
-
-*GET http://localhost:9999/deploy/traffic - Browser JSON - 200 OK - Returns {"strategy":"Blue-Green 100-0","green":100,"total":100,"activeEnv":"green","blue":0} - Proof of Traffic - After switch green 100% blue 0% - total 100 - strategy Blue-Green 100-0 - ALB weight*
-
-### Demo 6 – Browser - GET /deploy/versions - 2 deployments HEALTHY blue INACTIVE green ACTIVE
-[Demo6 Versions](screenshots/demo6.png)
-
-*GET http://localhost:9999/deploy/versions - Browser JSON - 200 OK - Returns [{"id":1,"environment":"blue","version":"v1.0","status":"INACTIVE","trafficWeight":0,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"},{"id":2,"environment":"green","version":"v2.0","status":"ACTIVE","trafficWeight":100,"instanceCount":1,"deployedAt":"2026-10-27T19:08:52.925906","health":"HEALTHY"}] - Proof of Versions - 2 deployments HEALTHY - Blue INACTIVE v1.0 traffic 0 + Green ACTIVE v2.0 traffic 100 - Instance count 1 each*
-
-### Demo 7 – Browser - GET /deploy/status after switch - activeEnv green blue 0 green 100
-[Demo7 Status Green](screenshots/demo7.png)
-
-*GET http://localhost:9999/deploy/status after switch - Browser JSON - 200 OK - Returns {"activeEnv":"green","traffic":{"blue":0,"green":100},"blueVersion":"v1.0","greenVersion":"v2.0","switchCount":1,"zeroDowntime":true} - Proof of Status after switch - activeEnv green - traffic blue 0 green 100 - switchCount 1 - Zero downtime maintained*
-
-### Demo 8 – Browser - GET /deploy/rollback - Rollback to blue Zero Downtime
-[Demo8 Rollback](screenshots/demo8.png)
-
-*GET http://localhost:9999/deploy/rollback - Browser JSON - 200 OK - Returns {"activeEnv":"blue","previousEnv":"green","switchCount":2,"message":"Traffic switched to BLUE - Zero Downtime Success!","traffic":{"green":0,"blue":100},"downtime":"0s"} - Proof of Rollback - If green has issue, rollback to blue - activeEnv blue again - switchCount 2 - Zero downtime rollback - Production safety*
-
-### Demo 9 – Render Live - Deploy Succeeded - LIVE - TIER 9 COMPLETE
-[Demo9 Render](screenshots/demo9.png)
-
-*Render Dashboard - 92-blue-green-deploy - STATUS: Deploy succeeded | Live - DURATION: 2m15s - DEPLOYED: Oct 27, 2026 at 7:15:05 PM GMT+5:30 - TRIGGER: Manual Deploy - SOURCE: commit xxxxxxx - Logs: Tomcat started on port 9999 - Started BlueGreenApplication in 11.275 seconds (process running for 12.007) - Your service is live - Available at your primary URL https://nine2-blue-green-deploy.onrender.com - Proof of Live Deployment on Internet - Docker Multi-Stage + Blue-Green Simulation working on Render - TIER 9 COMPLETE 83-92 92/100*
 
 ---
 
 # 🧪 API Testing Examples
 
 ```bash
-# GET Home - Local after Eclipse Run
 curl http://localhost:9999/
-
-# GET Home - LIVE on Render
-curl https://nine2-blue-green-deploy.onrender.com/
-
-# Init - Blue ACTIVE 100% Green INACTIVE 0%
 curl http://localhost:9999/deploy/init
-curl https://nine2-blue-green-deploy.onrender.com/deploy/init
-
-# Status - activeEnv blue traffic 100-0
 curl http://localhost:9999/deploy/status
-curl https://nine2-blue-green-deploy.onrender.com/deploy/status
-
-# Deploy Blue v1.1
-curl http://localhost:9999/deploy/blue?version=v1.1
-
-# Deploy Green v2.1
-curl http://localhost:9999/deploy/green?version=v2.1
-
-# Switch to Green - Zero Downtime Success
 curl http://localhost:9999/deploy/switch?target=green
-curl https://nine2-blue-green-deploy.onrender.com/deploy/switch?target=green
-
-# Traffic - green 100 blue 0 after switch
 curl http://localhost:9999/deploy/traffic
-curl https://nine2-blue-green-deploy.onrender.com/deploy/traffic
-
-# Versions - 2 deployments HEALTHY
 curl http://localhost:9999/deploy/versions
-curl https://nine2-blue-green-deploy.onrender.com/deploy/versions
-
-# Rollback - Switch back to Blue
 curl http://localhost:9999/deploy/rollback
-
-# Switch to Blue
-curl http://localhost:9999/deploy/switch?target=blue
-
-# Docker Test
-docker build -t 92-blue-green-deploy .
-docker run -d -p 9999:9999 --name bg-app 92-blue-green-deploy
-docker logs bg-app
-curl http://localhost:9999/deploy/init
-curl http://localhost:9999/deploy/status
-curl http://localhost:9999/deploy/switch?target=green
-curl http://localhost:9999/deploy/traffic
+curl https://nine2-blue-green-deploy.onrender.com/deploy/init
 ```
-
----
-
-# 🎯 Learning Outcomes
-
-- Understanding Blue-Green vs Rolling vs Canary Deployment - Rolling: Update 1 instance at a time - 1 old + 2 new + 1 old + 2 new (downtime risk if new version fails during rollout) vs Canary: 10% traffic to new version -> 50% -> 100% (gradual but complex) vs Blue-Green: 100% Blue ACTIVE + 0% Green INACTIVE -> Test Green internally -> Switch 100% Green 0% Blue in 1 sec (zero downtime, instant rollback, but needs double infra)
-- Understanding ALB Listener Rule Weight - AWS ALB has Listener Port 80 + Rule `IF Path /* THEN Forward to Target Group` + Target Group Blue TG (blue-ec2:9999) Weight 100 + Target Group Green TG (green-ec2:9999) Weight 0 = 100% traffic to Blue - Switch: `aws elbv2 modify-listener --listener-arn arn --default-actions Type=forward,ForwardConfig={TargetGroups=[{TargetGroupArn=blue-arn,Weight=0},{TargetGroupArn=green-arn,Weight=100}]}` = 0% Blue 100% Green - Zero downtime switch in milliseconds
-- Implementing BlueGreenService - activeEnv String blue/green + switchCount int + init() deletes all + creates blue v1.0 ACTIVE 100% + green v2.0 INACTIVE 0% + saves + activeEnv=blue -> status() finds blue + green + returns activeEnv + traffic map blue 100 green 0 + versions + switchCount + zeroDowntime true + strategy -> deployBlue(version) finds blue + sets version + deployedAt now + if activeEnv blue sets ACTIVE 100% else INACTIVE 0% + save() -> deployGreen same -> switchEnv(target green) finds blue + green + blue ACTIVE 100% -> INACTIVE 0% + green INACTIVE 0% -> ACTIVE 100% + activeEnv=green + switchCount++ + returns message Zero Downtime Success + traffic + downtime 0s
-- Understanding Zero Downtime - Blue env serves 100% live traffic -> Deploy Green env with v2.0 but 0% traffic -> Test Green internally via `GET /deploy/green?version=v2.1` + health check -> Switch traffic via ALB rule weight 0% blue 100% green -> Green serves 100% live traffic -> If Green fails -> Rollback via `GET /deploy/rollback` -> ALB weight back 100% blue 0% green in 1 sec -> No user sees downtime because ALB keeps serving from healthy TG during switch
-- Creating 10 Blue-Green Endpoints - GET / (home with activeEnv + traffic + totalDeployments), GET /health (UP + Blue-Green Ready + zeroDowntime Enabled), GET /deploy/init (blue ACTIVE 100% green INACTIVE 0% total 2), GET /deploy/status (activeEnv + traffic + versions + switchCount + zeroDowntime), GET /deploy/blue?version=v1.1 (deploy blue), GET /deploy/green?version=v2.0 (deploy green), GET /deploy/switch?target=green (Traffic switched to GREEN Success downtime 0s), GET /deploy/traffic (activeEnv + blue 0 green 100 total 100), GET /deploy/versions (2 deployments HEALTHY), GET /deploy/rollback (rollback to blue)
-- Using Spring Data JPA + Blue-Green - JpaRepository gives save(), findAll(), findByEnvironment(), count(), deleteAll() - H2 in-memory for local simulation, MySQL RDS for real when storing deployment state - Deployment entity mirrors `aws_instance` blue + green + `aws_lb_target_group` blue TG + green TG + `aws_lb_listener_rule` weight
-- Fixing blue\n newline bug - `bluegreen.active-env=${ACTIVE_ENV:blue}` reads env var with hidden \n - Fixed by hardcoding `bluegreen.active-env=blue` + removing ACTIVE_ENV from Run Configurations Environment Tab - Same pattern as Project 90/91 RDS_URL jdbc bug - Render env vars only PORT + ACTIVE_ENV + AWS_REGION no RDS_URL
-- Fixing META-INF build fail - Eclipse creates `src/main/java/META-INF/MANIFEST.MF` which conflicts with Maven `target/classes/META-INF` - Fixed by `**/META-INF/` in .gitignore + `Remove-Item -Recurse -Force src/main/java/META-INF` + `git rm -r --cached src/main/java/META-INF` before push - Same as Project 90/91
-- Preparing for Tier 10 Rate Limited API (93) - Blue-Green switchCount + trafficWeight + activeEnv tracking will be used for rate limiting per environment - Blue env 100 req/sec + Green env 100 req/sec + ALB distributes + Rate limiter per env
-- Understanding Tier 9 Complete - Projects 83-92 = DevOps + Cloud Tier - 83 Docker + 84 EC2 + 85 GitHub Actions CI/CD + 86 S3 + 87 RDS + 88 Secrets + 89 CloudWatch + 90 Load Balanced App + 91 Terraform Script + 92 Blue-Green Deploy = Full DevOps + Cloud Production Ready - 92/100 overall
-
----
-
-# 🚀 Future Enhancements
-
-- 🏗 Add Real main.tf for Blue-Green - Project 92 Enhancement - Create actual `main.tf`: `terraform { required_providers { aws={source="hashicorp/aws" version="~>5.0"} } } provider "aws" { region="ap-south-1" } resource "aws_vpc" "main" { cidr_block="10.0.0.0/16" } resource "aws_subnet" "public_a" { vpc_id=aws_vpc.main.id cidr_block="10.0.1.0/24" availability_zone="ap-south-1a" } resource "aws_subnet" "public_b" { vpc_id=aws_vpc.main.id cidr_block="10.0.2.0/24" availability_zone="ap-south-1b" } resource "aws_instance" "blue" { ami="ami-ubuntu" instance_type="t2.micro" subnet_id=aws_subnet.public_a.id tags={Name="blue-v1.0", Environment="blue"} } resource "aws_instance" "green" { ami="ami-ubuntu" instance_type="t2.micro" subnet_id=aws_subnet.public_b.id tags={Name="green-v2.0", Environment="green"} } resource "aws_lb" "main" { name="raviteja-92-alb" load_balancer_type="application" subnets=[aws_subnet.public_a.id, aws_subnet.public_b.id] } resource "aws_lb_target_group" "blue" { name="blue-tg" port=9999 protocol="HTTP" vpc_id=aws_vpc.main.id health_check={path="/health"} } resource "aws_lb_target_group" "green" { name="green-tg" port=9999 protocol="HTTP" vpc_id=aws_vpc.main.id health_check={path="/health"} } resource "aws_lb_listener" "main" { load_balancer_arn=aws_lb.main.arn port=80 protocol="HTTP" default_action={type="forward" forward={target_group=[{arn=aws_lb_target_group.blue.arn weight=100},{arn=aws_lb_target_group.green.arn weight=0}]}} }`
-- 🔵🟢 Add Auto Switch via Lambda - Add `aws_lambda_function` triggered by `aws_cloudwatch_metric_alarm` green healthy + `aws_lambda` code `modify-listener weight blue 0 green 100` - Auto switch when green passes health checks - No manual `aws elbv2 modify-listener`
-- 🔒 Add Blue-Green + Terraform Remote Backend - Store tfstate in S3 `raviteja-blue-green-state` with versioning + DynamoDB `terraform-locks-blue-green` lock - `terraform { backend "s3" { bucket="raviteja-blue-green-state" key="92/terraform.tfstate" region="ap-south-1" dynamodb_table="terraform-locks-blue-green" } }` - Prevents concurrent blue-green deploy
-- 🌐 Add Route 53 Weighted Routing - Add `aws_route53_record` with `weighted_routing_policy` weight 100 blue + 0 green -> Switch to 0 blue 100 green - DNS level blue-green instead of ALB level - For global blue-green
-- 📦 Add ECR + ECS Blue-Green via CodeDeploy - Add `aws_ecr_repository` + `aws_ecs_cluster` + `aws_ecs_task_definition` blue v1.0 + green v2.0 + `aws_codedeploy_app` + `aws_codedeploy_deployment_group` with `blue_green_deployment_config` + `deployment_style` `BLUE_GREEN` + `load_balancer_info` - ECS managed blue-green
-- 🔐 Add Blue-Green + Feature Flags - Add `app-config` or `launchdarkly` feature flag `new-ui-enabled` false in blue + true in green - Deploy green with flag off -> Switch traffic 100% green but flag off so users see old UI -> Gradually enable flag 10% -> 100% -> Canary + Blue-Green together
-- 📈 Add CloudWatch + Blue-Green Metrics - Add `aws_cloudwatch_metric_alarm` for Blue TG `UnhealthyHostCount >0` + Green TG `UnhealthyHostCount >0` + ALB `HTTPCode_Target_5XX_Count >0` + `TargetResponseTime >1s` - SNS alert + Lambda auto rollback to blue if green fails
-- 🧪 Add Smoke Tests After Switch - Add `aws_codebuild_project` smoke tests `curl https://blue-green.raviteja.dev/health` + `curl https://blue-green.raviteja.dev/deploy/status` + Check activeEnv green + traffic green 100 - If fail -> Auto rollback
-- 🏆 Final 100 - Add Blue-Green + All AWS Together - Project 100 - Use Terraform to create VPC + 2 AZ + ALB + Blue EC2 + Green EC2 + RDS + S3 + CloudWatch + Route 53 + One `terraform apply` creates full blue-green production + `aws elbv2 modify-listener` weight switch = Ultimate DevOps portfolio - 100/100
 
 ---
 
@@ -674,32 +359,6 @@ If you found this project helpful, consider giving it a ⭐ Star on GitHub.
 
 **Live URL:** https://nine2-blue-green-deploy.onrender.com/
 
-**Init URL:** https://nine2-blue-green-deploy.onrender.com/deploy/init -> Blue ACTIVE 100% Green INACTIVE 0% total 2
+**Tier 9:** 83 Docker + 84 EC2 + 85 GitHub Actions + 86 S3 + 87 RDS + 88 Secrets + 89 CloudWatch + 90 Load Balanced App + 91 Terraform Script + 92 Blue-Green Deploy = **TIER 9 COMPLETE 10/10 - 92/100 OVERALL**
 
-**Status URL:** https://nine2-blue-green-deploy.onrender.com/deploy/status -> activeEnv blue traffic blue 100 green 0 zeroDowntime true
-
-**Switch URL:** https://nine2-blue-green-deploy.onrender.com/deploy/switch?target=green -> Traffic switched to GREEN - Zero Downtime Success! switchCount 1 downtime 0s
-
-**Traffic URL:** https://nine2-blue-green-deploy.onrender.com/deploy/traffic -> activeEnv green blue 0 green 100 total 100 strategy Blue-Green 100-0
-
-**Versions URL:** https://nine2-blue-green-deploy.onrender.com/deploy/versions -> 2 deployments HEALTHY blue + green
-
-**Rollback URL:** https://nine2-blue-green-deploy.onrender.com/deploy/rollback -> Rollback to blue - Zero downtime safety
-
-**Docker Image:** `92-blue-green-deploy:latest` on Render (or `ravitejadev950/92-blue-green-deploy:latest` on Docker Hub optional)
-
-**GitHub Actions:** Ready for `Deploy via Blue-Green` - On Push to `main` via `aws elbv2 modify-listener` weight switch - Same as Project 90/91 but Blue-Green
-
-**Secrets:** `EC2_HOST` + `EC2_USERNAME` + `EC2_SSH_KEY` + `ACTIVE_ENV` + `AWS_REGION` + `RDS_URL` (for real AWS)
-
-**Blue-Green Strategy:** Blue 100% Green 0% -> Deploy Green 0% -> Test Green -> Switch Green 100% Blue 0% -> Monitor -> Rollback if needed -> Zero Downtime
-
-**Trigger:** `git push origin main` -> Render auto deploy -> `https://nine2-blue-green-deploy.onrender.com/deploy/init` LIVE -> `https://nine2-blue-green-deploy.onrender.com/deploy/switch?target=green` Zero Downtime!
-
-**Browser:** `GET /deploy/init` -> blue ACTIVE 100% -> `GET /deploy/status` -> activeEnv blue -> `GET /deploy/switch?target=green` -> GREEN Success! -> `GET /deploy/traffic` -> green 100 -> All 200 OK + Blue-Green flow
-
-**Pull:** `git clone https://github.com/raviteja-dev950/92-blue-green-deploy.git`
-
-**Tier 9:** 83 Docker (Dockerfile) + 84 EC2 (Deploy) + 85 GitHub Actions (CI/CD) + 86 S3 (Storage) + 87 RDS (Database) + 88 Secrets (Env) + 89 CloudWatch (Monitoring) + 90 Load Balanced App (ALB) + 91 Terraform Script (IaC) + 92 Blue-Green Deploy (Zero Downtime) = **TIER 9 COMPLETE 10/10 - 92/100 OVERALL**
-
-**Next Tier 10:** 93 Rate Limited API + 94 URL Shortener Scale + 95 Chat WebSockets + 96 Notification Service + 97 Analytics Dashboard + 98 Search Elastic + 99 Payment Stripe + 100 Final Deploy - Scaling + Microservices Tier
+**Next Tier 10:** 93 Rate Limited API + 94 URL Shortener Scale + 95 Chat WebSockets + 96 Notification Service + 97 Analytics Dashboard + 98 Search Elastic + 99 Payment Stripe + 100 Final Deploy
