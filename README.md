@@ -319,8 +319,7 @@ Env Vars:
   ACTIVE_ENV = blue
   AWS_REGION = ap-south-1
 ```
-
-<<<<<<< HEAD
+ HEAD
 =======
 Click `Deploy`
 
