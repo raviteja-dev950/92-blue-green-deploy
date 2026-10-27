@@ -21,7 +21,7 @@
 
 [![Live](https://img.shields.io/badge/Live-Render-brightgreen?style=for-the-badge&logo=render)](https://nine2-blue-green-deploy.onrender.com)
 
-Project 92 - Part of Java 100 Projects Challenge - DevOps + Cloud Tier - **Tier 9 COMPLETE 83-92**
+Project 92 - Part of Java 100 Projects Challenge -DevOps + Cloud Tier -**Tier 9 COMPLETE 83-92**
 ---
 
 # 📖 Project Overview
