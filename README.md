@@ -220,6 +220,16 @@ This is Project 92 of Tier 9 - FINAL - After Terraform Script (91), now real Blu
 
 *Render Dashboard - 92-blue-green-deploy - STATUS: Deploy succeeded | Live - DURATION: 2m15s - DEPLOYED: Oct 27, 2026 at 7:15:05 PM GMT+5:30 - TRIGGER: Manual Deploy - SOURCE: commit xxxxxxx - Logs: Tomcat started on port 9999 - Started BlueGreenApplication in 11.275 seconds (process running for 12.007) - Your service is live - Available at your primary URL https://nine2-blue-green-deploy.onrender.com - Proof of Live Deployment on Internet - Docker Multi-Stage + Blue-Green Simulation working on Render - TIER 9 COMPLETE 83-92 92/100 - Final Project of Tier 9*
 
+### Demo 13 – Render Logs Dark - Deploy succeeded Live - Started in 74.998s - Your service is live
+![Demo13 Logs Dark](screenshots/demo13.png)
+
+*Render Logs - Dark Theme - :: Spring Boot :: v3.2.5 - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:raviteja92 - Hibernate create table deployments - Tomcat started on port 10000 - Started BlueGreenApplication in 74.998 seconds - Your service is live - Available at https://nine2-blue-green-deploy.onrender.com - Proof of Logs - Tier 9 Complete*
+
+### Demo 14 – Render Logs Light - Deploy succeeded Live - Tomcat 10000 - H2 raviteja92 - Live URL
+![Demo14 Logs Light](screenshots/demo14.png)
+
+*Render Logs - Light Theme - Clean terminal - 2026-10-27T17:01:57 INFO Starting BlueGreenApplication Java 21 - HikariPool-1 Start completed - Hibernate create table deployments - Tomcat started on port 10000 - Started in 74.998s - Your service is live - https://nine2-blue-green-deploy.onrender.com - Duration 3m00s Deployed Oct 27 2026 - Portfolio Ready*
+
 ---
 
 # ▶ How to Run - Blue-Green Repo
